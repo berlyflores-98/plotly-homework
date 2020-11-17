@@ -126,7 +126,6 @@ function updateInfo(){
             x: top10Samples.map(row => row.sample_values),
             y: top10Samples.map(row => `OTU ${row.otu_ids}`),
             text: top10Samples.map(row => row.otu_labels),
-            name: "Greek",
             type: "bar",
             orientation: "h"
         };
@@ -167,6 +166,36 @@ function updateInfo(){
           };
           
           Plotly.newPlot('bubble', data_b, layout_b);
+
+          //BONUS
+
+          //attempting gauge
+          var data_g = [
+            {
+              domain: { x: [0, 1], y: [0, 1] },
+              value: tab_info[6],
+              title: { text: "Belly Button Washing Frequency" },
+              labels: ["0-1", "1-2", "2-3", "3-4", "4-5", "6-7","7-8","8-9"],
+              type: "indicator",
+              mode: "gauge+number",
+              gauge: {
+                steps: [
+                  { range: [0, 1], color: "rgb(255, 255, 255)"},
+                  { range: [1, 2], color: "gray" },
+                  { range: [2, 3], color: "gray" },
+                  { range: [3, 4], color: "gray" },
+                  { range: [4, 5], color: "gray" },
+                  { range: [5, 6], color: "gray" },
+                  { range: [6, 7], color: "gray" },
+                  { range: [7, 8], color: "gray" },
+                  { range: [8, 9], color: "gray" }
+                ],
+              }
+            }
+          ];
+          
+          var layout_g = { width: 600, height: 450, margin: { t: 0, b: 0 } };
+          Plotly.newPlot('gauge', data_g, layout_g);
           
 
         });
