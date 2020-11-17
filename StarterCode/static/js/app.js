@@ -107,13 +107,15 @@ function updateInfo(){
         for(var j = 0; j < len_list; j++){
           otu_list.push({ 'otu_ids': otu_list_ids[j],'sample_values': sample_val[j], 'otu_labels': otu_labels[j]})
         };
+
+        sort_out_list = otu_list;
         
         // Sort the samples in descending order of sample values
-        otu_list.sort((a, b) => b.sample_values - a.sample_values);
+        sort_out_list.sort((a, b) => b.sample_values - a.sample_values);
 
         // To retrieve the first 10 items
-        var top10Samples = otu_list;
-        top10Samples = otu_list.slice(0, 10);
+        var top10Samples = sort_out_list;
+        top10Samples = sort_out_list.slice(0, 10);
         
         
         // Reverse the array due to Plotly's defaults
@@ -145,6 +147,27 @@ function updateInfo(){
 
         // Render the plot to the div tag with id "plot"
         Plotly.newPlot("bar", chartData, layout);
+
+        // Create a bubble chart that displays each sample.
+        var trace2 = {
+            x: otu_list.map(row => row.otu_ids),
+            y: otu_list.map(row => row.sample_values),
+            text: otu_list.map(row => row.otu_labels),
+            mode: 'markers',
+            marker: {
+              size: otu_list.map(row => row.sample_values),
+              color: otu_list.map(row => row.otu_ids),
+              type: "scatter",
+            }
+          };
+          var data_b = [trace2];
+          var config = { responsive: true };
+          var layout_b = {
+            xaxis: { title: 'OTU ID' }
+          };
+          
+          Plotly.newPlot('bubble', data_b, layout_b);
+          
 
         });
     
