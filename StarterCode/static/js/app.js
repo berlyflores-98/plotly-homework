@@ -64,7 +64,6 @@ function updateInfo(){
             
             //since it was in an array getting the actual values
             var tab_info = Object.values(data_info[0]);
-            console.log(tab_info);
             //not setting it as key value pairs and getting string of info
             var display_tab_info = [
                 `id: ${tab_info[0]}`,
@@ -84,6 +83,39 @@ function updateInfo(){
             .text(function (data) {
                 return data;
             });
+
+        sample_info = []
+        var sample_info = samples.filter(function(d){
+            if (d.id === dropdownValue){
+                return d
+            };
+        });
+
+        
+
+        //get the data into an array
+        var sample_arr_info = sample_info[0];
+        
+        //we will need to sort to get top 10, however since data is split into 3 arrays, we will need to put it all together then sort
+        var otu_list_ids = Object.values(sample_arr_info)[1];
+        var sample_val = Object.values(sample_arr_info)[2];
+        var otu_labels = Object.values(sample_arr_info)[3];
+        var len_list = otu_list_ids.length;
+
+        var otu_list = [];
+        //looping through to get all data into the list
+        for(var j = 0; j < len_list; j++){
+          otu_list.push({ 'otu_ids': otu_list_ids[j],'sample_values': sample_val[j], 'otu_labels': otu_labels[j]})
+        };
+        
+        // Sort the samples in descending order of sample values
+        otu_list.sort((a, b) => b.sample_values - a.sample_values);
+
+        // To retrieve the first 10 items
+        var top10SelSamples = otu_list.slice(0, 10);
+        console.log(top10SelSamples);
+
+
 
 
         });
