@@ -112,11 +112,39 @@ function updateInfo(){
         otu_list.sort((a, b) => b.sample_values - a.sample_values);
 
         // To retrieve the first 10 items
-        var top10SelSamples = otu_list.slice(0, 10);
-        console.log(top10SelSamples);
+        var top10Samples = otu_list;
+        top10Samples = otu_list.slice(0, 10);
+        
+        
+        // Reverse the array due to Plotly's defaults
+        top10Samples = top10Samples.reverse();
+        console.log(top10Samples);
+        // Trace1 for the otu Data
+        var trace1 = {
+            x: top10Samples.map(row => row.sample_values),
+            y: top10Samples.map(row => `OTU ${row.otu_ids}`),
+            text: top10Samples.map(row => row.otu_labels),
+            name: "Greek",
+            type: "bar",
+            orientation: "h"
+        };
 
+        // data
+        var chartData = [trace1];
 
+        // Apply the group bar mode to the layout
+        var layout = {
+            title: "Top 10 OTUs",
+            margin: {
+            l: 100,
+            r: 100,
+            t: 100,
+            b: 100
+            }
+        };
 
+        // Render the plot to the div tag with id "plot"
+        Plotly.newPlot("bar", chartData, layout);
 
         });
     
