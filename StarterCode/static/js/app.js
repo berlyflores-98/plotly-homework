@@ -25,11 +25,20 @@ d3.json("samples.json").then((importedData) => {
 };
 
 //when the dropdown changes load the information
-d3.select('#selDataset').on('change', updateInfo);
+d3.select('#selDataset').on('change', removePrevData);
+
+function removePrevData(){
+d3.event.preventDefault();
+    d3.select("#sample-metadata")
+            .selectAll('p')
+            .remove()
+    
+ updateInfo();
+}
 
 function updateInfo(){
     //preventing from not reloading
-    d3.event.preventDefault();
+    
     d3.json("samples.json").then((importedData) => {
         //grabbing the data to load
         var data = importedData;
@@ -52,7 +61,29 @@ function updateInfo(){
                 };
             });
     
-            console.log(data_info)
+            
+            //since it was in an array getting the actual values
+            var tab_info = Object.values(data_info[0]);
+            console.log(tab_info);
+            //not setting it as key value pairs and getting string of info
+            var display_tab_info = [
+                `id: ${tab_info[0]}`,
+                `ethnicity: ${tab_info[1]}`,
+                `gender: ${tab_info[2]}`,
+                `age: ${tab_info[3]}`,
+                `location: ${tab_info[4]}`,
+                `bbttype: ${tab_info[5]}`,
+                `wfreq: ${tab_info[6]}`
+            ]
+            //displaying the string of info onto table
+            d3.select("#sample-metadata")
+            .selectAll('p')
+            .data(display_tab_info)
+            .enter()
+            .append('p')
+            .text(function (data) {
+                return data;
+            });
 
 
         });
